@@ -6,6 +6,7 @@ import { persona, usuario } from './user.model';
 import { vehiculo } from './vehicles.model';
 import { categoria, mantenimiento } from './maintenance';
 import { orden_trabajo } from './orden_trabajo';
+import routesVehiculo from '../routes/vehiculo.routes';
 
 
 class Server {
@@ -29,7 +30,7 @@ class Server {
 
     routes() {
         this.app.use('/api/users', routesUser);
-        // this.app.use('/api/products', routesProducts)
+        this.app.use('/api/vehiculos', routesVehiculo)
 
     }
 
