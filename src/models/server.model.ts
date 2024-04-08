@@ -7,7 +7,8 @@ import { vehiculo } from './vehicles.model';
 import { categoria, mantenimiento } from './maintenance';
 import { orden_trabajo } from './orden_trabajo';
 import routesVehiculo from '../routes/vehiculo.routes';
-
+import  swaggerUi  from 'swagger-ui-express';
+import swaggerSetup from '../docs/swagger';
 
 class Server {
     private app: Application
@@ -31,7 +32,7 @@ class Server {
     routes() {
         this.app.use('/api/users', routesUser);
         this.app.use('/api/vehiculos', routesVehiculo)
-
+        this.app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
     }
 
     midlewares() {
