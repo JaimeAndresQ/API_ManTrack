@@ -2,17 +2,28 @@ import { Request, Response } from 'express'
 import { vehiculo } from '../models/vehicles.model'
 
 
-export const newVehiculo = async (req: Request, res: Response) => {
-
-    //Recibimos todos los atributos o datos especificos del vehiculo a registrar
-    const { id_vehiculo, marca, modelo, linea, color, capacidad, clase_vehiculo, cilindraje, tipo_combustible, numero_motor, numero_chasis, vin, ciudad_registro, fecha_matricula } = req.body
+export const newVehiculo = async (req: Request, res: Response): Promise<Response | void> => {
 
     try {
+        //Recibimos todos los atributos o datos especificos del vehiculo a registrar
+        const {
+            id_vehiculo, marca, modelo, linea, color, capacidad,
+            clase_vehiculo, cilindraje, tipo_combustible, numero_motor,
+            numero_chasis, vin, ciudad_registro, fecha_matricula
+        } = req.body;
+
+        // Validar que todos los campos requeridos estén presentes
+        if (!id_vehiculo || !marca || !modelo || !linea || !color || !capacidad ||
+            !clase_vehiculo || !cilindraje || !tipo_combustible || !numero_motor ||
+            !numero_chasis || !vin || !ciudad_registro || !fecha_matricula) {
+            return res.status(400).json({ msg: 'Todos los campos son requeridos' });
+        }
+
         // Verificamos si el vehículo ya está registrado
         const vehiculoExistente = await vehiculo.findByPk(id_vehiculo);
         if (vehiculoExistente) {
             // Si el vehículo ya existe, respondemos con un error 400
-            res.status(400).json({ msg: `El vehículo con la placa ${id_vehiculo} ya se encuentra registrado` });
+            return res.status(400).json({ msg: `El vehículo con la placa ${id_vehiculo} ya se encuentra registrado` });
         }
 
         // Registramos el vehículo con los datos especificados por el usuario
@@ -43,25 +54,32 @@ export const newVehiculo = async (req: Request, res: Response) => {
 };
 
 //Método para consultar un vehiculo mediante su placa
-export const getVehiculoById = async (req: Request, res:Response) => {
-    //Recibimos com parametro la placa del vehiculo
-    const {id_vehiculo} = req.params
+export const getVehiculoById = async (req: Request, res: Response): Promise<Response | void> => {
 
-    try{
+    try {
+
+        //Recibimos com parametro la placa del vehiculo
+        const { id_vehiculo } = req.params
+
+        // Validar que la placa del vehículo esté presente
+        if (!id_vehiculo) {
+            return res.status(400).json({ msg: 'La placa del vehículo es requerida' });
+        }
 
         const vehiculoExistente = await vehiculo.findByPk(id_vehiculo);
-        if(!vehiculoExistente){
-            res.status(404).json({
+        if (!vehiculoExistente) {
+            return res.status(404).json({
                 msg: `Vehiculo con la placa ${id_vehiculo} no encontrado`
             })
         }
 
+        // Respuesta exitosa con el vehículo encontrado
         res.status(200).json(vehiculoExistente);
 
 
-    }catch (error) {
+    } catch (error) {
         // Si ocurre un error, respondemos con un error 500
-        console.error(`Error al consultar el vehículo de placa ${id_vehiculo}:`, error);
-        res.status(500).json({ msg: `Ups ocurrió un error al consultar el vehículo de placa ${id_vehiculo}`, error });
+        console.error(`Error al consultar el vehículo`, error);
+        res.status(500).json({ msg: `Ups ocurrió un error al consultar el vehículo`, error });
     }
 }
