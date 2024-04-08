@@ -9,7 +9,15 @@ export interface UsuarioModel extends Model {
     fk_id_persona: number;
 }
 
-const persona = sequelize.define('Persona', {
+export interface PersonaModel extends Model {
+    id_persona: number;
+    pe_nombres: string;
+    pe_apellidos: string;
+    pe_telefono: number;
+    pe_fecha_nacimiento: string;
+}
+
+const persona = sequelize.define<PersonaModel>('Persona', {
     id_persona: {
         type: DataTypes.BIGINT,
         primaryKey: true,

@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { UsuarioModel, persona, usuario } from '../models/user.model';
+import { PersonaModel, UsuarioModel,persona, usuario } from '../models/user.model';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
 
 export const newUser = async (req: Request, res: Response) => {
   
@@ -74,6 +73,8 @@ export const loginUser = async (req: Request, res: Response): Promise<Response |
         })
     }
 
+    const personaUsuario: PersonaModel | null = await persona.findOne({where: {id_persona: usuarioExistente.fk_id_persona}})
+
     //Validamos la contraseña del usuario
     const contraseniaValida = await bcrypt.compare(contrasenia, usuarioExistente?.usu_contrasena)
     if(!contraseniaValida){
@@ -84,6 +85,9 @@ export const loginUser = async (req: Request, res: Response): Promise<Response |
     //Si la contraseña es válida : Generamos un JWT Token para proteger las rutas de acceso
     const token = jwt.sign({
         correo: id_correo,
+        nombres: personaUsuario?.pe_nombres,
+        apellidos: personaUsuario?.pe_apellidos,
+        telefono: personaUsuario?.pe_telefono
     }, process.env.SECRET_KEY ?? 'N35kxkHHhCz49eVge6X0C@GckT!@', {expiresIn: '3600000'})
 
     const userInfo = await usuario.findByPk(id_correo)
