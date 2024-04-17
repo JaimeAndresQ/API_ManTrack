@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.post('/newVehiculo',validateToken, newVehiculo);
 router.get('/vehiculo/:id_vehiculo',validateToken, getVehiculoById);
-router.get('/getAll', getAllVehiculos);
+router.get('/getAll',validateToken, getAllVehiculos);
 
 export default router;
