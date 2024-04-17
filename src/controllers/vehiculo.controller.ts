@@ -23,7 +23,7 @@ export const newVehiculo = async (req: Request, res: Response): Promise<Response
         const vehiculoExistente = await vehiculo.findByPk(id_vehiculo);
         if (vehiculoExistente) {
             // Si el vehículo ya existe, respondemos con un error 400
-            return res.status(400).json({ msg: `El vehículo con la placa ${id_vehiculo} ya se encuentra registrado` });
+            return res.status(409).json({ msg: `El vehículo con la placa ${id_vehiculo} ya se encuentra registrado` });
         }
 
         // Registramos el vehículo con los datos especificados por el usuario
@@ -83,3 +83,27 @@ export const getVehiculoById = async (req: Request, res: Response): Promise<Resp
         res.status(500).json({ msg: `Ups ocurrió un error al consultar el vehículo`, error });
     }
 }
+
+//Traer todos los vehiculos existentes 
+export const getAllVehiculos = async (_req: Request, res: Response): Promise<Response | void> => {
+    try {
+        // Consultar todos los vehículos
+        const vehiculos = await vehiculo.findAll({
+            attributes: ['id_vehiculo', 'veh_marca', 'veh_modelo', 'veh_linea']
+        });
+
+        if (vehiculos.length > 0) {
+            // Respuesta exitosa con los vehículos encontrados
+            return res.status(200).json(vehiculos);
+        }else {
+            return res.status(404).json({
+                msg: `No se encontraron vehículos`
+            })
+        }
+        
+    } catch (error) {
+        // Si ocurre un error, responder con un error 500
+        console.error('Error al consultar los vehículos:', error);
+        return res.status(500).json({ msg: 'Ups ocurrió un error al consultar los vehículos', error });
+    }
+};
