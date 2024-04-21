@@ -107,3 +107,47 @@ export const getAllVehiculos = async (_req: Request, res: Response): Promise<Res
         return res.status(500).json({ msg: 'Ups ocurrió un error al consultar los vehículos', error });
     }
 };
+
+export const updateVehiculo = async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+        // Recibimos el ID del vehículo a actualizar y los nuevos datos
+        const { id_vehiculo } = req.params;
+        const {
+            marca, modelo, linea, color, capacidad,
+            clase_vehiculo, cilindraje, tipo_combustible, numero_motor,
+            numero_chasis, vin, ciudad_registro, fecha_matricula
+        } = req.body;
+
+        // Verificamos si el vehículo existe
+        const vehiculoExistente = await vehiculo.findByPk(id_vehiculo);
+        if (!vehiculoExistente) {
+            return res.status(404).json({ msg: `El vehículo con placa ${id_vehiculo} no fue encontrado` });
+        }
+
+        // Actualizamos el vehículo con los nuevos datos
+        await vehiculo.update({
+            veh_marca: marca,
+            veh_modelo: modelo,
+            veh_linea: linea,
+            veh_color: color,
+            veh_capacidad: capacidad,
+            veh_clase_vehiculo: clase_vehiculo,
+            veh_cilindraje: cilindraje,
+            veh_tipo_combustible: tipo_combustible,
+            veh_numero_motor: numero_motor,
+            veh_numero_chasis: numero_chasis,
+            veh_vin: vin,
+            veh_ciudad_registro: ciudad_registro,
+            veh_fecha_matricula: fecha_matricula
+        }, {
+            where: { id_vehiculo: id_vehiculo }
+        });
+
+        // Si todo va bien, respondemos con un mensaje de éxito
+        res.status(200).json({ msg: `Vehículo con placa ${id_vehiculo} actualizado exitosamente` });
+    } catch (error) {
+        // Si ocurre un error, respondemos con un error 500
+        console.error('Error al actualizar el vehículo:', error);
+        res.status(500).json({ msg: 'Ups ocurrió un error al actualizar el vehículo', error });
+    }
+};
