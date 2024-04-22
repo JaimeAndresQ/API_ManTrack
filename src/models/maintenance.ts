@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/db_connection'; 
-import { vehiculo } from './vehicles.model'; 
 
 const mantenimiento = sequelize.define('Mantenimiento',
     {
@@ -55,9 +54,6 @@ const categoria = sequelize.define('Categoria',
 
 )
 
-//Relación uno a muchos de vehiculo y mantenimiento
-vehiculo.hasMany(mantenimiento, { foreignKey: 'fk_id_vehiculo', sourceKey: 'id_vehiculo'})
-mantenimiento.belongsTo(vehiculo, { foreignKey: 'fk_id_vehiculo', targetKey: 'id_vehiculo'})
 
 //Relación de categoria y mantenimiento
 categoria.hasOne(mantenimiento, {foreignKey: 'fk_id_categoria', sourceKey: 'id_categoria'})

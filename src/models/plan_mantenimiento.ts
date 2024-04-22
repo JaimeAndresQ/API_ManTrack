@@ -13,7 +13,7 @@ plan_mantenimiento.init({
         references: {
             model: vehiculo,
             key: 'id_vehiculo',
-          },
+        },
     },
     fk_id_mantenimiento: {
         type: DataTypes.INTEGER,
@@ -22,7 +22,7 @@ plan_mantenimiento.init({
         references: {
             model: mantenimiento,
             key: 'id_mantenimiento',
-          },
+        },
     },
     pl_nombre: {
         type: DataTypes.STRING(155),
@@ -33,5 +33,8 @@ plan_mantenimiento.init({
     modelName: 'plan_mantenimiento',
     timestamps: false
 });
+
+plan_mantenimiento.belongsTo(mantenimiento, {foreignKey: 'fk_id_mantenimiento'} )
+
 
 export { plan_mantenimiento };
