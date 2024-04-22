@@ -19,17 +19,13 @@ const mantenimiento = sequelize.define('Mantenimiento',
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        man_fecha: {
-            type: DataTypes.DATEONLY,
+        man_duracion_estimada: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         fk_id_categoria: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-        fk_id_vehiculo: {
-            type: DataTypes.STRING(6),
-            allowNull: false,
         }
     },
     {

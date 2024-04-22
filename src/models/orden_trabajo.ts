@@ -31,12 +31,16 @@ const orden_trabajo = sequelize.define('Orden_trabajo',
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        ord_tiempo_ejecucion: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         fk_id_usuario_correo: {
             type: DataTypes.STRING(60),
             allowNull: false,
         },
-        fk_id_mantenimiento: {
-            type: DataTypes.INTEGER,
+        fk_id_vehiculo: {
+            type: DataTypes.STRING(6),
             allowNull: false,
         }
     },
