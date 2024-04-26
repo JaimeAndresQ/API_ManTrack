@@ -118,16 +118,123 @@ const swaggerDefinition: OAS3Definition = {
                         format: 'date'
                     }
                 }
-            }
-            
-            
+            },
+            mantenimiento: {
+                type: 'object',
+                required: ['id_mantenimiento', 'man_tipo_mantenimiento', 'man_descripcion', 'man_duracion_estimada', 'fk_id_categoria'],
+                properties: {
+                    id_mantenimiento: {
+                        type: 'integer',
+                    },
+                    man_tipo_mantenimiento: {
+                        type: 'string',
+                    },
+                    man_descripcion: {
+                        type: 'string',
+                    },
+                    man_duracion_estimada: {
+                        type: 'integer',
+                    },
+                    fk_id_categoria: {
+                        type: 'integer',
+                    }
+                }
+            },
+        
+            categoria: {
+                type: 'object',
+                required: ['id_categoria', 'cat_nombre'],
+                properties: {
+                    id_categoria: {
+                        type: 'integer',
+                    },
+                    cat_nombre: {
+                        type: 'string',
+                    }
+                }
+            },
+        
+            orden_trabajo: {
+                type: 'object',
+                required: ['id_orden_trabajo', 'ord_descripcion', 'ord_observaciones', 'ord_fecha_realizacion', 'ord_estado', 'ord_tiempo_estimado', 'ord_tiempo_ejecucion', 'fk_id_usuario_correo', 'fk_id_vehiculo'],
+                properties: {
+                    id_orden_trabajo: {
+                        type: 'integer',
+                    },
+                    ord_descripcion: {
+                        type: 'string',
+                    },
+                    ord_observaciones: {
+                        type: 'string',
+                    },
+                    ord_fecha_realizacion: {
+                        type: 'string',
+                        format: 'date-time'
+                    },
+                    ord_estado: {
+                        type: 'string',
+                    },
+                    ord_tiempo_estimado: {
+                        type: 'integer',
+                    },
+                    ord_tiempo_ejecucion: {
+                        type: 'integer',
+                    },
+                    fk_id_usuario_correo: {
+                        type: 'string',
+                    },
+                    fk_id_vehiculo: {
+                        type: 'string',
+                    }
+                }
+            },
+
+            plan_mantenimiento: {
+                type: 'object',
+                required: ['id_plan_mantenimiento', 'pl_nombre'],
+                properties: {
+                    id_plan_mantenimiento: {
+                        type: 'integer',
+                    },
+                    pl_nombre: {
+                        type: 'string',
+                    }
+                }
+            },
+
+            plan_mantenimiento_tiene_vehiculo: {
+                type: 'object',
+                required: ['fk_id_vehiculo', 'fk_id_plan_mantenimiento'],
+                properties: {
+                    fk_id_vehiculo: {
+                        type: 'string',
+                        maxLength: 6
+                    },
+                    fk_id_plan_mantenimiento: {
+                        type: 'integer',
+                    }
+                }
+            },
+
+            plan_mantenimiento_tiene_mantenimiento: {
+                type: 'object',
+                required: ['fk_id_mantenimiento', 'fk_id_plan_mantenimiento'],
+                properties: {
+                    fk_id_mantenimiento: {
+                        type: 'integer',
+                    },
+                    fk_id_plan_mantenimiento: {
+                        type: 'integer',
+                    }
+                }
+            }       
         }
     }
 };
 
 const swaggerOptions: OAS3Options = {
     swaggerDefinition,
-    apis: ['src/routes/user.routes.ts'],
+    apis: ['src/routes/*.routes.ts'],
 };
 
 export default swaggerJSDoc(swaggerOptions)

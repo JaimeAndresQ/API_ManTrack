@@ -4,11 +4,171 @@ import { asociarMantenimientoPlan, asociarVehiculoPlan, getAllPlanesMantenimient
 
 const router = express.Router();
 
+/**
+ * @openapi
+ * /api/planesMantenimiento/newPlan:
+ *   post:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Crear nuevo plan de mantenimiento
+ *     description: Crea un nuevo plan de mantenimiento en la base de datos.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: Datos del nuevo plan de mantenimiento
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/planMantenimiento'
+ *     responses:
+ *       '200':
+ *         description: Plan de mantenimiento creado exitosamente
+ *       '400':
+ *         description: Error en la solicitud o falta de campos requeridos
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.post('/newPlan',validateToken, newPlanMantenimiento);
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/getAll:
+ *   get:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Obtener todos los planes de mantenimiento
+ *     description: Obtiene todos los planes de mantenimiento almacenados en la base de datos.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Planes de mantenimiento obtenidos exitosamente
+ *       '404':
+ *         description: No se encontraron planes de mantenimiento
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.get('/getAll',validateToken, getAllPlanesMantenimiento);
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/newMantenimiento:
+ *   post:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Crear nuevo mantenimiento
+ *     description: Crea un nuevo registro de mantenimiento en la base de datos.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: Datos del nuevo mantenimiento
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/mantenimiento'
+ *     responses:
+ *       '200':
+ *         description: Mantenimiento creado exitosamente
+ *       '400':
+ *         description: Error en la solicitud o falta de campos requeridos
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.post('/newMantenimiento',validateToken, newMantenimiento);
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/mantenimiento/updatePlan:
+ *   put:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Asociar mantenimiento a plan de mantenimiento
+ *     description: Asocia un mantenimiento existente a un plan de mantenimiento existente.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: IDs del mantenimiento y plan de mantenimiento
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_mantenimiento:
+ *                 type: integer
+ *               id_plan_mantenimiento:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Mantenimiento asociado exitosamente al plan de mantenimiento
+ *       '400':
+ *         description: Error en la solicitud o falta de IDs de mantenimiento y plan de mantenimiento
+ *       '404':
+ *         description: No se encontró el mantenimiento con el ID proporcionado
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.put('/mantenimiento/updatePlan',validateToken, asociarMantenimientoPlan);
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/vehiculo/updatePlan:
+ *   put:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Asociar vehículo a plan de mantenimiento
+ *     description: Asocia un vehículo existente a un plan de mantenimiento existente.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: IDs del vehículo y plan de mantenimiento
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_vehiculo:
+ *                 type: string
+ *               id_plan_mantenimiento:
+ *                 type: integer
+ *     responses:
+ *       '200':
+ *         description: Vehículo asociado exitosamente al plan de mantenimiento
+ *       '400':
+ *         description: Error en la solicitud o falta de IDs de vehículo y plan de mantenimiento
+ *       '404':
+ *         description: No se encontró el vehículo con el ID proporcionado
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.put('/vehiculo/updatePlan',validateToken, asociarVehiculoPlan);
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/vehiculosNoAsociados/{id_plan_mantenimiento}:
+ *   get:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Obtener vehículos no asociados a un plan de mantenimiento
+ *     description: Obtiene los vehículos que aún no están asociados a un plan de mantenimiento específico.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_plan_mantenimiento
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del plan de mantenimiento del que se desean obtener los vehículos no asociados
+ *     responses:
+ *       '200':
+ *         description: Vehículos no asociados obtenidos exitosamente
+ *       '500':
+ *         description: Error interno del servidor
+ */
 router.get('/vehiculosNoAsociados/:id_plan_mantenimiento',validateToken, getVehiculosNoAsociados)
 
 export default router;
