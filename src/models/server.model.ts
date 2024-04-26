@@ -36,7 +36,7 @@ class Server {
         this.app.use('/api/users', routesUser);
         this.app.use('/api/vehiculos', routesVehiculo)
         this.app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
-        this.app.use('/api/mantenimientos', routesMantenimiento)
+        this.app.use('/api/planesMantenimientos', routesMantenimiento)
         this.app.use('/api/imagenes', routesImagenes)
     }
 

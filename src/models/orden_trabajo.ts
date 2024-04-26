@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/db_connection'; // Asegúrate de importar tu instancia de Sequelize correctamente// Importa el modelo de Producto
 import { usuario } from './user.model';
-import { mantenimiento } from './maintenance';
+import { vehiculo } from './vehicles.model';
 
 const orden_trabajo = sequelize.define('Orden_trabajo',
     {
@@ -54,9 +54,9 @@ const orden_trabajo = sequelize.define('Orden_trabajo',
 usuario.hasMany(orden_trabajo, {foreignKey: 'fk_id_usuario_correo', sourceKey: 'id_usuario_correo'})
 orden_trabajo.belongsTo(usuario, {foreignKey: 'fk_id_usuario_correo', targetKey: 'id_usuario_correo'})
 
-//Relacion de mantenimiento y orden de trabajo.
-mantenimiento.hasOne(orden_trabajo, {foreignKey: 'fk_id_mantenimiento', sourceKey: 'id_mantenimiento'})
-orden_trabajo.belongsTo(mantenimiento, {foreignKey: 'fk_id_mantenimiento', targetKey: 'id_mantenimiento'})
+//Relacion de vehiculo y orden de trabajo (Un vehiculo puede tener asociado una o muchas ordenes de trabajo).
+vehiculo.hasMany(orden_trabajo, {foreignKey: 'fk_id_vehiculo', sourceKey: 'id_vehiculo'})
+orden_trabajo.belongsTo(vehiculo, {foreignKey: 'fk_id_vehiculo', targetKey: 'id_vehiculo'})
 
 
 export { orden_trabajo }

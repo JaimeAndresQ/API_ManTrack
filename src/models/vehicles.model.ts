@@ -68,5 +68,4 @@ import sequelize from '../db/db_connection'
     }
 )
 
-
 export {vehiculo}

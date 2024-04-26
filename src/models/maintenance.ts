@@ -25,7 +25,7 @@ const mantenimiento = sequelize.define('Mantenimiento',
         fk_id_categoria: {
             type: DataTypes.INTEGER,
             allowNull: false
-        }
+        },
     },
     {
         tableName: 'Mantenimiento',
@@ -53,7 +53,6 @@ const categoria = sequelize.define('Categoria',
     }
 
 )
-
 
 //Relación de categoria y mantenimiento
 categoria.hasOne(mantenimiento, {foreignKey: 'fk_id_categoria', sourceKey: 'id_categoria'})
