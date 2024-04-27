@@ -11,7 +11,7 @@ import  swaggerUi  from 'swagger-ui-express';
 import swaggerSetup from '../docs/swagger';
 import routesMantenimiento from '../routes/plan_mantenimiento.routes';
 import routesImagenes from '../routes/imagenes.routes';
-import { plan_mantenimiento } from './plan_mantenimiento';
+import { plan_mantenimiento, plan_mantenimiento_tiene_mantenimiento, plan_mantenimiento_tiene_vehiculo } from './plan_mantenimiento';
 
 class Server {
     private app: Application
@@ -49,13 +49,15 @@ class Server {
         try {
             await sequelize.authenticate();
             console.log('Conexion con la DB ha sido establecida exitosamente');
-            await usuario.sync()
-            await persona.sync()
-            await vehiculo.sync()
-            await mantenimiento.sync()
-            await orden_trabajo.sync()
-            await categoria.sync()
-            await plan_mantenimiento.sync()
+            await usuario.sync();
+            await persona.sync();
+            await vehiculo.sync();
+            await mantenimiento.sync();
+            await orden_trabajo.sync();
+            await categoria.sync();
+            await plan_mantenimiento.sync();
+            await plan_mantenimiento_tiene_vehiculo.sync();
+            await plan_mantenimiento_tiene_mantenimiento.sync();
         } catch (error) {
             console.log(`Conexion fallida - Error ${error}`)
         }

@@ -11,7 +11,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/uploadVehiculos:
+ * /api/imagenes/uploadVehiculos:
  *   post:
  *     tags:
  *       - Imagenes - vehiculo
@@ -43,7 +43,7 @@ router.post('/uploadVehiculos',validateToken, upload.single("file"), uploadImage
 
 /**
  * @openapi
- * /api/vehiculo/{placa_vehiculo}:
+ * /api/imagenes/vehiculo/{placa_vehiculo}:
  *   get:
  *     tags:
  *       - Imagenes - vehiculo
@@ -75,14 +75,12 @@ router.get('/vehiculo/:placa_vehiculo',validateToken, upload.single("file"), get
 
 /**
  * @openapi
- * /api/uploadUsuario:
+ * /api/imagenes/uploadUsuario:
  *   post:
  *     tags:
  *       - Imagenes - usuario
  *     summary: Subir imagen de usuario
  *     description: Sube una imagen para el usuario especificado.
- *     security:
- *       - BearerAuth: []
  *     requestBody:
  *       description: Archivo de imagen a subir
  *       required: true
@@ -101,12 +99,12 @@ router.get('/vehiculo/:placa_vehiculo',validateToken, upload.single("file"), get
  *         description: Error interno del servidor
  * */
 
-router.post('/uploadUsuario',validateToken, upload.single("file"), uploadImagenesUsuario)
+router.post('/uploadUsuario', upload.single("file"), uploadImagenesUsuario)
 
 
 /**
  * @openapi
- * /api/usuario/{correo}:
+ * /api/imagenes/usuario/{correo}:
  *   get:
  *     tags:
  *       - Imagenes - usuario

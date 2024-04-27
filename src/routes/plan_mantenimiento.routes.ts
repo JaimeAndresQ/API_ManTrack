@@ -1,12 +1,12 @@
 import express from "express";
 import validateToken from "./validate_token";
-import { asociarMantenimientoPlan, asociarVehiculoPlan, getAllPlanesMantenimiento, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
+import { asociarMantenimientoPlan, asociarVehiculoPlan, getAllPlanesMantenimiento, getMantenimientosNoAsociados, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
 
 const router = express.Router();
 
 /**
  * @openapi
- * /api/planesMantenimiento/newPlan:
+ * /api/planesMantenimientos/newPlan:
  *   post:
  *     tags:
  *       - Planes de Mantenimiento
@@ -33,7 +33,7 @@ router.post('/newPlan',validateToken, newPlanMantenimiento);
 
 /**
  * @openapi
- * /api/planesMantenimiento/getAll:
+ * /api/planesMantenimientos/getAll:
  *   get:
  *     tags:
  *       - Planes de Mantenimiento
@@ -49,11 +49,11 @@ router.post('/newPlan',validateToken, newPlanMantenimiento);
  *       '500':
  *         description: Error interno del servidor
  */
-router.get('/getAll',validateToken, getAllPlanesMantenimiento);
+router.get('/getAll', getAllPlanesMantenimiento);
 
 /**
  * @openapi
- * /api/planesMantenimiento/newMantenimiento:
+ * /api/planesMantenimientos/newMantenimiento:
  *   post:
  *     tags:
  *       - Planes de Mantenimiento
@@ -80,7 +80,7 @@ router.post('/newMantenimiento',validateToken, newMantenimiento);
 
 /**
  * @openapi
- * /api/planesMantenimiento/mantenimiento/updatePlan:
+ * /api/planesMantenimientos/mantenimiento/updatePlan:
  *   put:
  *     tags:
  *       - Planes de Mantenimiento
@@ -170,5 +170,30 @@ router.put('/vehiculo/updatePlan',validateToken, asociarVehiculoPlan);
  *         description: Error interno del servidor
  */
 router.get('/vehiculosNoAsociados/:id_plan_mantenimiento',validateToken, getVehiculosNoAsociados)
+
+/**
+ * @openapi
+ * /api/planesMantenimiento/mantenientosNoAsociados/{id_plan_mantenimiento}:
+ *   get:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Obtener mantenimientos no asociados a un plan de mantenimiento
+ *     description: Obtiene los mantenimientos que aún no están asociados a un plan de mantenimiento específico.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_plan_mantenimiento
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del plan de mantenimiento del que se desean obtener los mantenimientos no asociados
+ *     responses:
+ *       '200':
+ *         description: Mantenimientos no asociados obtenidos exitosamente
+ *       '500':
+ *         description: Error interno del servidor
+ */
+router.get('/mantenientosNoAsociados/:id_plan_mantenimiento', getMantenimientosNoAsociados)
 
 export default router;

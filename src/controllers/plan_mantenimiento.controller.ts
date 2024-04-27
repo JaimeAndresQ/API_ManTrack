@@ -219,3 +219,40 @@ export const getVehiculosNoAsociados = async (req: Request, res: Response): Prom
         return res.status(500).json({ msg: 'Ups ocurrió un error al obtener los vehículos no asociados', error });
     }
 };
+
+
+
+export const getMantenimientosNoAsociados = async (req: Request, res: Response): Promise<Response> => {
+
+    //Traemos el id del plan de mantenimiento que queremos buscar
+    const { id_plan_mantenimiento } = req.params; 
+    
+    try {
+        // Obtener los IDs de los mantenimientos asociados al plan de mantenimiento dado
+        const mantenimientoNoAsociados = plan_mantenimiento_tiene_mantenimiento.findAll({
+            where: {
+                fk_id_plan_mantenimiento: id_plan_mantenimiento
+            },
+            attributes: ['fk_id_mantenimiento'] // Solo obtener los IDs de los mantenimientos asociados
+        });
+
+        const MantenimientosAsociadosModels = await mantenimientoNoAsociados;
+
+        // Mapear los modelos de Sequelize a un array de IDs de mantenimientos asociados
+        const MantenimientosAsociados = MantenimientosAsociadosModels.map((mantenimientoAsociado: any) => mantenimientoAsociado.fk_id_mantenimiento);
+
+        // Obtener los mantenimientos que no están asociados al plan de mantenimiento dado
+        const mantenimientosNoAsociados = await mantenimiento.findAll({
+            where: {
+                id_mantenimiento: {
+                    [Op.notIn]: MantenimientosAsociados // Filtrar los vehículos que no están en la lista de vehículos asociados
+                }
+            }
+        });
+
+        return res.status(200).json({ mantenimientosNoAsociados });
+    } catch (error) {
+        console.error('Error al obtener los mantenimientos no asociados:', error);
+        return res.status(500).json({ msg: 'Ups ocurrió un error al obtener los mantenimientos no asociados', error });
+    }
+};
