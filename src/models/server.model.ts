@@ -11,6 +11,7 @@ import  swaggerUi  from 'swagger-ui-express';
 import swaggerSetup from '../docs/swagger';
 import routesMantenimiento from '../routes/plan_mantenimiento.routes';
 import routesImagenes from '../routes/imagenes.routes';
+import routesOrdenTrabajo from '../routes/ordenes_trabajo.routes';
 import { plan_mantenimiento, plan_mantenimiento_tiene_mantenimiento, plan_mantenimiento_tiene_vehiculo } from './plan_mantenimiento';
 
 class Server {
@@ -38,6 +39,7 @@ class Server {
         this.app.use('/api/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
         this.app.use('/api/planesMantenimientos', routesMantenimiento)
         this.app.use('/api/imagenes', routesImagenes)
+        this.app.use('/api/ordenesTrabajo', routesOrdenTrabajo)
     }
 
     midlewares() {
@@ -58,6 +60,7 @@ class Server {
             await plan_mantenimiento.sync();
             await plan_mantenimiento_tiene_vehiculo.sync();
             await plan_mantenimiento_tiene_mantenimiento.sync();
+
         } catch (error) {
             console.log(`Conexion fallida - Error ${error}`)
         }

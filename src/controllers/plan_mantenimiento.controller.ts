@@ -65,7 +65,8 @@ export const getAllPlanesMantenimiento = async (_req: Request, res: Response): P
                                 'id_mantenimiento',
                                 'man_tipo_mantenimiento',
                                 'man_descripcion',
-                                'man_duracion_estimada'
+                                'man_duracion_estimada',
+                                'fk_id_categoria'
                             ]
                         }
                     ]
