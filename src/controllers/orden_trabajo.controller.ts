@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { orden_trabajo } from '../models/orden_trabajo';
-import { usuario } from '../models/user.model';
+import { persona, usuario } from '../models/user.model';
 import { vehiculo } from '../models/vehicles.model';
 import moment from 'moment-timezone';
 
@@ -123,7 +123,20 @@ export const getOrdenesTrabajoByEstado = async (req: Request, res: Response): Pr
 
         // Buscar todas las órdenes de trabajo con el estado especificado
         const ordenesTrabajo = await orden_trabajo.findAll({
-            where: { ord_estado: estado }
+            where: { ord_estado: estado },
+            //Traer información del usuario asociado
+            include: [
+                {
+                    model: usuario,
+                    include: [
+                        {
+                            model: persona,
+                            attributes: ['pe_nombres', 'pe_apellidos']
+                        }
+                    ],
+                    attributes: ['id_usuario_correo']
+                }
+            ]
         });
 
         // Si no se encontraron órdenes de trabajo con ese estado, responder con un mensaje

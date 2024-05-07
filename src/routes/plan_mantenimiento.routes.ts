@@ -1,6 +1,6 @@
 import express from "express";
 import validateToken from "./validate_token";
-import { asociarMantenimientoPlan, asociarVehiculoPlan, getAllPlanesMantenimiento, getMantenimientosNoAsociados, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
+import { asociarMantenimientoPlan, asociarVehiculoPlan, eliminarMantenimientoPlan, eliminarVehiculoPlan, getAllPlanesMantenimiento, getMantenimientosNoAsociados, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
 
 const router = express.Router();
 
@@ -20,7 +20,12 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/planMantenimiento'
+ *             type: object
+ *             properties:
+ *               pl_nombre:
+ *                 type: string
+ *               fecha_realizacion:
+ *                 type: string
  *     responses:
  *       '200':
  *         description: Plan de mantenimiento creado exitosamente
@@ -195,5 +200,78 @@ router.get('/vehiculosNoAsociados/:id_plan_mantenimiento',validateToken, getVehi
  *         description: Error interno del servidor
  */
 router.get('/mantenientosNoAsociados/:id_plan_mantenimiento', getMantenimientosNoAsociados)
+
+/**
+ * @openapi
+ * /api/planesMantenimientos/eliminarMantenimiento:
+ *   delete:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Eliminar mantenimiento de un plan de mantenimiento
+ *     description:  Elimina un mantenimiento de un plan de mantenimiento específico.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: Datos de la consulta.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_mantenimiento:
+ *                 type: integer
+ *                 description: ID del mantenimiento a eliminar del plan de mantenimiento
+ *               id_plan_mantenimiento:
+ *                 type: integer
+ *                 description: ID del plan de mantenimiento del cual eliminar el mantenimiento
+ *     responses:
+ *       '200':
+ *         description: Mantenimiento eliminado con éxito del plan de mantenimiento
+ *       '400':
+ *         description: Se requieren los IDs de mantenimiento y plan de mantenimiento
+ *       '404':
+ *         description: No se encontró la asociación entre el mantenimiento y el plan de mantenimiento
+ *       '500':
+ *         description: Ups ocurrió un error al eliminar el mantenimiento del plan de mantenimiento
+ */
+router.delete('/eliminarMantenimiento', validateToken, eliminarMantenimientoPlan)
+
+
+/**
+ * @openapi
+ * /api/planesMantenimientos/eliminarVehiculo:
+ *   delete:
+ *     tags:
+ *       - Planes de Mantenimiento
+ *     summary: Eliminar vehículo de un plan de mantenimiento
+ *     description:  Elimina un vehículo de un plan de mantenimiento específico.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       description: Datos de la consulta.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_vehiculo:
+ *                 type: string
+ *                 description: ID del vehículo a eliminar del plan de mantenimiento
+ *               id_plan_mantenimiento:
+ *                 type: integer
+ *                 description: ID del plan de mantenimiento del cual eliminar el vehículo
+ *     responses:
+ *       '200':
+ *         description: Vehículo eliminado con éxito del plan de mantenimiento
+ *       '400':
+ *         description: Se requieren los IDs de vehículo y plan de mantenimiento
+ *       '404':
+ *         description: No se encontró la asociación entre el vehículo y el plan de mantenimiento
+ *       '500':
+ *         description: Ups ocurrió un error al eliminar el vehículo del plan de mantenimiento
+ */
+router.delete('/eliminarVehiculo', validateToken, eliminarVehiculoPlan)
 
 export default router;

@@ -198,6 +198,13 @@ const swaggerDefinition: OAS3Definition = {
                     },
                     pl_nombre: {
                         type: 'string',
+                    },
+                    pl_fecha_realizacion_estimada: {
+                        type: 'string',
+                        format: 'date'
+                    },
+                    pl_estado: {
+                        type: 'integer'
                     }
                 }
             },

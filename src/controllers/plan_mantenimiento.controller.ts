@@ -7,16 +7,18 @@ import { Op } from 'sequelize';
 export const newPlanMantenimiento = async (req: Request, res: Response): Promise<Response | void> => {
     try {
         // Recibimos todos los atributos o datos específicos del plan de mantenimiento a registrar
-        const { pl_nombre } = req.body;
+        const { pl_nombre, fecha_realizacion } = req.body;
 
         // Validar que todos los campos requeridos estén presentes
-        if (!pl_nombre) {
+        if (!pl_nombre || !fecha_realizacion) {
             return res.status(400).json({ msg: 'Todos los campos son requeridos' });
         }
 
         // Crear el nuevo plan de mantenimiento
         await plan_mantenimiento.create({
-            pl_nombre
+            pl_nombre: pl_nombre,
+            pl_fecha_realizacion_estimada: fecha_realizacion,
+            pl_estado: 1
         });
 
         // Si todo va bien, respondemos con un mensaje de éxito
@@ -255,5 +257,67 @@ export const getMantenimientosNoAsociados = async (req: Request, res: Response):
     } catch (error) {
         console.error('Error al obtener los mantenimientos no asociados:', error);
         return res.status(500).json({ msg: 'Ups ocurrió un error al obtener los mantenimientos no asociados', error });
+    }
+};
+
+export const eliminarVehiculoPlan = async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+        // Recibir el id del plan de mantenimiento y el id del vehículo a eliminar
+        const { id_vehiculo, id_plan_mantenimiento } = req.body;
+
+        // Validar que se proporcionen los IDs de vehículo y plan de mantenimiento
+        if (!id_vehiculo || !id_plan_mantenimiento) {
+            return res.status(400).json({ msg: 'Se requieren los IDs de vehículo y plan de mantenimiento' });
+        }
+
+        // Buscar la relación entre el vehículo y el plan de mantenimiento para eliminarla
+        const resultado = await plan_mantenimiento_tiene_vehiculo.destroy({
+            where: {
+                fk_id_vehiculo: id_vehiculo,
+                fk_id_plan_mantenimiento: id_plan_mantenimiento
+            }
+        });
+
+        // Verificar si se eliminó correctamente
+        if (resultado === 1) {
+            return res.status(200).json({ msg: 'Vehículo eliminado con éxito del plan de mantenimiento' });
+        } else {
+            return res.status(404).json({ msg: 'No se encontró la asociación entre el vehículo y el plan de mantenimiento' });
+        }
+    } catch (error) {
+        // Si ocurre un error, responder con un error 500
+        console.error('Error al eliminar el vehículo del plan de mantenimiento:', error);
+        return res.status(500).json({ msg: 'Ups ocurrió un error al eliminar el vehículo del plan de mantenimiento', error });
+    }
+}
+
+export const eliminarMantenimientoPlan = async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+        // Recibir el id del mantenimiento y el id del plan de mantenimiento a eliminar
+        const { id_mantenimiento, id_plan_mantenimiento } = req.body;
+
+        // Validar que se proporcionen los IDs de mantenimiento y plan de mantenimiento
+        if (!id_mantenimiento || !id_plan_mantenimiento) {
+            return res.status(400).json({ msg: 'Se requieren los IDs de mantenimiento y plan de mantenimiento' });
+        }
+
+        // Buscar la relación entre el mantenimiento y el plan de mantenimiento para eliminarla
+        const resultado = await plan_mantenimiento_tiene_mantenimiento.destroy({
+            where: {
+                fk_id_mantenimiento: id_mantenimiento,
+                fk_id_plan_mantenimiento: id_plan_mantenimiento
+            }
+        });
+
+        // Verificar si se eliminó correctamente
+        if (resultado === 1) {
+            return res.status(200).json({ msg: 'Mantenimiento eliminado con éxito del plan de mantenimiento' });
+        } else {
+            return res.status(404).json({ msg: 'No se encontró la asociación entre el mantenimiento y el plan de mantenimiento' });
+        }
+    } catch (error) {
+        // Si ocurre un error, responder con un error 500
+        console.error('Error al eliminar el mantenimiento del plan de mantenimiento:', error);
+        return res.status(500).json({ msg: 'Ups ocurrió un error al eliminar el mantenimiento del plan de mantenimiento', error });
     }
 };

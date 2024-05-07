@@ -15,6 +15,15 @@ const plan_mantenimiento = sequelize.define('plan_mantenimiento',{
         allowNull: false,
         primaryKey: true,
     },
+    pl_fecha_realizacion_estimada: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    pl_estado: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 1
+    }
 }, {
     tableName: 'plan_mantenimiento',
     timestamps: false
