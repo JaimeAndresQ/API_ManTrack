@@ -153,3 +153,42 @@ export const getOrdenesTrabajoByEstado = async (req: Request, res: Response): Pr
     }
 };
 
+
+export const getOrdenTrabajoById = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id_orden_trabajo } = req.params; //Id de la orden de trabajo a buscar
+
+        // Verificar si se proporcionó el id en la solicitud
+        if (!id_orden_trabajo) {
+            return res.status(400).json({ msg: 'El estado de la orden de trabajo es requerido' });
+        }
+
+        // Buscar la orden de trabajo con el id especificado
+        const ordenTrabajo = await orden_trabajo.findByPk(id_orden_trabajo, {
+            include: [
+                {
+                    model: usuario, // Incluye el modelo "usuario"
+                    include: [
+                        {
+                            model: persona, // Incluye el modelo "persona" asociado al usuario
+                            attributes: ['pe_nombres', 'pe_apellidos'] // Selecciona solo los atributos 'pe_nombres' y 'pe_apellidos' de la persona
+                        }
+                    ],
+                    attributes: ['id_usuario_correo'] // Selecciona solo el atributo 'id_usuario_correo' del usuario
+                }
+            ]
+        });
+
+        // Si no se encontraron una orden de trabajo con ese id.
+        if (!ordenTrabajo ) {
+            return res.status(404).json({ msg: 'No se encontró una orden de trabajo con el id solicitado' });
+        }
+
+        // Si se encontró la orden de trabjo,devolverla
+        return res.status(200).json({ ordenTrabajo });
+    } catch (error) {
+        // Si ocurre un error, responder con un error 500
+        console.error('Error al obtener la orden de trabajo, mediante id:', error);
+        return res.status(500).json({ msg: 'Ups ocurrió un error al obtener la orden de trabajo', error });
+    }
+};

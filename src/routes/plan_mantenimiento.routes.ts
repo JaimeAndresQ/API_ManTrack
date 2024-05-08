@@ -1,6 +1,6 @@
 import express from "express";
 import validateToken from "./validate_token";
-import { asociarMantenimientoPlan, asociarVehiculoPlan, eliminarMantenimientoPlan, eliminarVehiculoPlan, getAllPlanesMantenimiento, getMantenimientosNoAsociados, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
+import { asociarMantenimientoPlan, asociarVehiculoPlan, eliminarMantenimientoPlan, eliminarVehiculoPlan, getAllPlanesMantenimiento, getMantenimientos, getMantenimientosNoAsociados, getVehiculosNoAsociados, newMantenimiento, newPlanMantenimiento } from "../controllers/plan_mantenimiento.controller";
 
 const router = express.Router();
 
@@ -272,6 +272,8 @@ router.delete('/eliminarMantenimiento', validateToken, eliminarMantenimientoPlan
  *       '500':
  *         description: Ups ocurrió un error al eliminar el vehículo del plan de mantenimiento
  */
-router.delete('/eliminarVehiculo', validateToken, eliminarVehiculoPlan)
+router.delete('/eliminarVehiculo', validateToken, eliminarVehiculoPlan);
+
+router.get('/obtenerMantenimientos', getMantenimientos)
 
 export default router;

@@ -321,3 +321,42 @@ export const eliminarMantenimientoPlan = async (req: Request, res: Response): Pr
         return res.status(500).json({ msg: 'Ups ocurrió un error al eliminar el mantenimiento del plan de mantenimiento', error });
     }
 };
+
+export const getMantenimientos = async (_req: Request, res: Response): Promise<Response | void> => {
+    try{
+        const mantenimientos = await mantenimiento.findAll({
+            include: [
+                {
+                    model: plan_mantenimiento_tiene_mantenimiento,
+                    include: [
+                        {
+                            model: plan_mantenimiento,
+                            include: [
+                                {
+                                    model: plan_mantenimiento_tiene_vehiculo,
+                                    include: [
+                                        {
+                                            model: vehiculo,
+                                            attributes: [
+                                                'id_vehiculo',
+                                                
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                           
+                        }
+                    ],
+                    
+                }
+            ]
+        });
+
+        // Devolver la respuesta con los mantenimientos y la placa del vehículo
+        return res.json(mantenimientos);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error interno del servidor" });
+    }
+}

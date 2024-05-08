@@ -1,5 +1,5 @@
 import express from "express";
-import { getOrdenesTrabajoByEstado, newOrdenTrabajo, updateAprobarOrdenTrabajo, updateFinalizarOrdenTrabajo } from "../controllers/orden_trabajo.controller";
+import { getOrdenTrabajoById, getOrdenesTrabajoByEstado, newOrdenTrabajo, updateAprobarOrdenTrabajo, updateFinalizarOrdenTrabajo } from "../controllers/orden_trabajo.controller";
 import validateToken from "./validate_token";
 
 const router = express.Router();
@@ -141,5 +141,35 @@ router.put('/aprobarOrden/:id_orden_trabajo', validateToken, updateAprobarOrdenT
  *         description: Error interno del servidor
  */
 router.get('/getAll/:estado', validateToken, getOrdenesTrabajoByEstado);
+
+/**
+ * @openapi
+ * /api/ordenesTrabajo/orden/{id_orden_trabajo}:
+ *   get:
+ *     tags:
+ *       - Órdenes de Trabajo
+ *     summary: Obtener una orden de trabjo
+ *     description: Obtiene una orden de trabjo especificando su id.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_orden_trabajo
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Estado de la orden de trabajo a buscar
+ *     responses:
+ *       '200':
+ *         description: Orden de trabajo obtenida exitosamente.
+ *       '400':
+ *         description: Falta el id en la solicitud
+ *       '404':
+ *         description: No se encontró la orden de trabajo con el id especificado
+ *       '500':
+ *         description: Error interno del servidor
+ */
+router.get('/orden/:id_orden_trabajo', validateToken, getOrdenTrabajoById);
+
 
 export default router;
