@@ -61,16 +61,16 @@ const orden_trabajo = sequelize.define('orden_trabajo',
 )
 
 //Relacion de usuario y orden de trabajo (Un usuario puede tener una o muchas ordenes de trabajo)
-usuario.hasMany(orden_trabajo, {foreignKey: 'fk_id_usuario_correo', sourceKey: 'id_usuario_correo'})
-orden_trabajo.belongsTo(usuario, {foreignKey: 'fk_id_usuario_correo', targetKey: 'id_usuario_correo'})
+usuario.hasMany(orden_trabajo, { foreignKey: 'fk_id_usuario_correo', sourceKey: 'id_usuario_correo' })
+orden_trabajo.belongsTo(usuario, { foreignKey: 'fk_id_usuario_correo', targetKey: 'id_usuario_correo' })
 
 //Relacion de vehiculo y orden de trabajo (Un vehiculo puede tener asociado una o muchas ordenes de trabajo).
-vehiculo.hasMany(orden_trabajo, {foreignKey: 'fk_id_vehiculo', sourceKey: 'id_vehiculo'})
-orden_trabajo.belongsTo(vehiculo, {foreignKey: 'fk_id_vehiculo', targetKey: 'id_vehiculo'})
+vehiculo.hasMany(orden_trabajo, { foreignKey: 'fk_id_vehiculo', sourceKey: 'id_vehiculo' })
+orden_trabajo.belongsTo(vehiculo, { foreignKey: 'fk_id_vehiculo', targetKey: 'id_vehiculo' })
 
 //Relación de categoria y orden de trabajo
-categoria.hasOne(orden_trabajo, {foreignKey: 'fk_id_categoria', sourceKey: 'id_categoria'})
-orden_trabajo.belongsTo(categoria, {foreignKey: 'fk_id_categoria', targetKey: 'id_categoria' })
+categoria.hasOne(orden_trabajo, { foreignKey: 'fk_id_categoria', sourceKey: 'id_categoria' })
+orden_trabajo.belongsTo(categoria, { foreignKey: 'fk_id_categoria', targetKey: 'id_categoria' })
 
 
 export { orden_trabajo }

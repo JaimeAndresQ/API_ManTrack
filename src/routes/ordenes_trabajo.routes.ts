@@ -1,5 +1,5 @@
 import express from "express";
-import { getOrdenTrabajoById, getOrdenesTrabajoByEstado, newOrdenTrabajo, updateAprobarOrdenTrabajo, updateFinalizarOrdenTrabajo } from "../controllers/orden_trabajo.controller";
+import { getOrdenTrabajoById, getOrdenesTrabajoByEstado, getOrdenesTrabajoByVehiculo, newOrdenTrabajo, updateAprobarOrdenTrabajo, updateFinalizarOrdenTrabajo } from "../controllers/orden_trabajo.controller";
 import validateToken from "./validate_token";
 
 const router = express.Router();
@@ -170,6 +170,46 @@ router.get('/getAll/:estado', validateToken, getOrdenesTrabajoByEstado);
  *         description: Error interno del servidor
  */
 router.get('/orden/:id_orden_trabajo', validateToken, getOrdenTrabajoById);
+
+/**
+ * @openapi
+ * /api/ordenesTrabajo/orden/vehiculo/{id_vehiculo}:
+ *   get:
+ *     tags:
+ *       - Órdenes de Trabajo
+ *     summary: Obtener órdenes de trabajo por vehículo
+ *     description: Obtiene todas las órdenes de trabajo asociadas a un vehículo específico.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id_vehiculo
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Placa del vehículo para el cual se desean obtener las órdenes de trabajo
+ *     responses:
+ *       '200':
+ *         description: Órdenes de trabajo obtenidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ordenesTrabajo:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/orden_trabajo'  # Referencia al esquema de OrdenTrabajo
+ *       '400':
+ *         description: La placa del vehículo es requerida o tiene un formato inválido
+ *       '404':
+ *         description: No se encontraron órdenes de trabajo asociadas a la placa del vehículo especificado
+ *       '500':
+ *         description: Error interno del servidor
+ */
+
+router.get('/orden/vehiculo/:id_vehiculo', validateToken, getOrdenesTrabajoByVehiculo);
+
 
 
 export default router;

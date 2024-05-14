@@ -156,7 +156,7 @@ const swaggerDefinition: OAS3Definition = {
         
             orden_trabajo: {
                 type: 'object',
-                required: ['id_orden_trabajo', 'ord_descripcion', 'ord_observaciones', 'ord_fecha_realizacion', 'ord_estado', 'ord_tiempo_estimado', 'ord_tiempo_ejecucion', 'fk_id_usuario_correo', 'fk_id_vehiculo'],
+                required: ['id_orden_trabajo', 'ord_descripcion', 'ord_observaciones', 'ord_fecha_realizacion', 'ord_estado', 'ord_tiempo_estimado', 'ord_tiempo_ejecucion', 'fk_id_usuario_correo', 'fk_id_vehiculo', 'fk_id_categoria'],
                 properties: {
                     id_orden_trabajo: {
                         type: 'integer',
@@ -180,18 +180,26 @@ const swaggerDefinition: OAS3Definition = {
                     ord_tiempo_ejecucion: {
                         type: 'integer',
                     },
+                    ord_tipo_mantenimiento: {
+                        type: 'string',
+                    },
                     fk_id_usuario_correo: {
                         type: 'string',
+                        maxLength: 60,
                     },
                     fk_id_vehiculo: {
                         type: 'string',
+                        maxLength: 6,
+                    },
+                    fk_id_categoria: {
+                        type: 'integer',
                     }
                 }
             },
 
             plan_mantenimiento: {
                 type: 'object',
-                required: ['id_plan_mantenimiento', 'pl_nombre'],
+                required: ['id_plan_mantenimiento', 'pl_nombre', 'pl_fecha_realizacion_estimada', 'pl_estado'],
                 properties: {
                     id_plan_mantenimiento: {
                         type: 'integer',
@@ -208,6 +216,7 @@ const swaggerDefinition: OAS3Definition = {
                     }
                 }
             },
+
 
             plan_mantenimiento_tiene_vehiculo: {
                 type: 'object',

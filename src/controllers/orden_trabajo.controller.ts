@@ -192,3 +192,43 @@ export const getOrdenTrabajoById = async (req: Request, res: Response): Promise<
         return res.status(500).json({ msg: 'Ups ocurrió un error al obtener la orden de trabajo', error });
     }
 };
+
+export const getOrdenesTrabajoByVehiculo = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { id_vehiculo } = req.params; // Placa del vehiculo a buscar los ordenes de trabjo.
+
+        // Verificar si se proporcionó la placa del vehiculo en la solicitud
+        if (!id_vehiculo) {
+            return res.status(400).json({ msg: 'La placa del vehiculo es requerida' });
+        }
+
+        // Buscar todas las órdenes de trabajo con la placa especificada
+        const ordenesTrabajo = await orden_trabajo.findAll({
+            where: { fK_id_vehiculo: id_vehiculo },
+            //Traer información del usuario asociado
+            include: [
+                {
+                    model: usuario,
+                    include: [
+                        {
+                            model: persona,
+                            attributes: ['pe_nombres', 'pe_apellidos']
+                        }
+                    ],
+                    attributes: ['id_usuario_correo']
+                }
+            ]
+        });
+
+        // Si no se encontraron órdenes de trabajo con ese vehiculo, responder con un mensaje
+        if (!ordenesTrabajo || ordenesTrabajo.length === 0) {
+            return res.status(404).json({ msg: 'No se encontraron órdenes de trabajo con la placa ingresada' });
+        }
+
+        // Si se encontraron órdenes de trabajo, responder con los datos
+        return res.status(200).json({ ordenesTrabajo });
+    } catch (error) {
+        // Si ocurre un error, responder con un error 500
+        return res.status(500).json({ msg: 'Ups ocurrió un error al obtener las órdenes de trabajo por placa', error });
+    }
+};
